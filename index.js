@@ -60,7 +60,14 @@ const { Server } = require("socket.io");
 const app = express();
 const port = 3000;
 
-app.use(cors({ origin: "*" }));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://harmonious-pudding-049454.netlify.app",
+    ],
+  })
+);
 app.use(express.json());
 app.use(morgan("dev"));
 
@@ -80,13 +87,13 @@ async function run() {
     // Collection for tasks.
     const tasksCollection = client.db("JobTask").collection("tasks");
 
-    app.post("/users", async (req, res) => {
+    app.post("users", async (req, res) => {
       const user = req.body;
       const result = await userCollection.insertOne(user);
       res.send(result);
     });
 
-    app.get("/users", async (req, res) => {
+    app.get("users", async (req, res) => {
       const result = await userCollection.find().toArray();
       res.send(result);
     });
